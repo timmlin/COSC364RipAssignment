@@ -4,20 +4,15 @@
 
 import routerConfig
 from router import *
-
+import sys
 
 
 def main():
-    config = routerConfig.readFile("Routers.txt")
-    defaultRouterName = "router"
+    routers = routerConfig.readFile(sys.argv[1])
     routersList = []
     #initilises a router class for each router in the file 
-    for strRouter in config:
-
+    for strRouter in routers:
         currentRouter = routerConfig.getInfo(strRouter)
-        routername = f"{defaultRouterName}{currentRouter[0]}"
-        #print(routername, currentRouter)
-
         routersList.append(Router(currentRouter))
         
 
