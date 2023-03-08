@@ -5,19 +5,24 @@ def readFile(name):
     return config
 
 def getInfo(info):
-    inputs2 = []
-    id, inputs, outputs = info.split(",")
+    id, inputs, outputs = info.split(", ")
 
-    id = id.split(" ")[1]
+    processed_inputs = []
 
-    inputs = inputs.split(" ")[2:]
+    processed_outputs = []
 
-    outputs = outputs.split(" ")[2:]
+    id = int(id.split(" ")[1])
+    
+    inputs = inputs.split(" ")[1:]
+    for input in inputs:
+            processed_inputs.append(int(input))
 
-    # for input in inputs:
-    #     input.strip()
-    #     print(input)
-    #     inputs2.append(int(input))
-    print(id)
-    print(inputs)
-    print(outputs)
+    outputs = outputs.split(" ")[1:]
+    for output in outputs:
+        peer_input, metric, peer_id = output.split("-")
+        processed_outputs.append([int(peer_input), int(metric), int(peer_id)])
+
+
+def verify(id, inputs, outputs):
+    """'''"""
+    
