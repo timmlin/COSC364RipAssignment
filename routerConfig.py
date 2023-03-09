@@ -6,31 +6,43 @@ def readFile(name):
 
 def getInfo(info):
     routerInfo = info.split(", ") 
-    processed_inputs = []
-    processed_outputs = []
-    processed_timers = []
+    processedInputs = []
+    processedOutputs = []
+    processedTimers = []
 
-    id = int(routerInfo[0].split(" ")[1])
     
+    id = (routerInfo[0].split(" ")[1])
     inputs = routerInfo[1].split(" ")[1:]
-    for input in inputs:
-            processed_inputs.append(int(input))
-
     outputs = routerInfo[2].split(" ")[1:]
+    
+    numericCheck(id)
+    id = int(id)
+
+    for input in inputs:
+            numericCheck(input)
+            processedInputs.append(int(input))
+
     for output in outputs:
-        peer_input, metric, peer_id = output.split("-")
-        processed_outputs.append([int(peer_input), int(metric), int(peer_id)])
+        outputData = output.split("-")
+        outputList = []
+        for value in outputData:
+            numericCheck(value)
+            outputList.append(int(value))
+        processedOutputs.append(outputList)
 
     if len(routerInfo) == 4:
         timers = (routerInfo[3].split(" ")[1:])
         for timer in timers:
-            processed_timers.append(int(timer))
+            processedTimers.append(int(timer))
     else: 
-        processed_timers = [180, 30,30]
+        processedTimers = [180, 30,30]
     
-    return [id, processed_inputs, processed_outputs, processed_timers]
+    return [id, processedInputs, processedOutputs, processedTimers]
 
 
-def verify(id, inputs, outputs):
+def numericCheck(value):
     """'''"""
+    if value.isnumeric() == False:
+        print(f"'{value}' is not a numeric value, please input a numeric value") 
+        sys.exit()
     
