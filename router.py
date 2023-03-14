@@ -2,20 +2,26 @@
 #Tim Lindbom & Ben Ireland
 #8/3/23
 
+import socket
+
 class Router:
-        
+
     def __init__(self, parameters):
         self.id = parameters[0]        
         self.inputs = parameters[1]
         self.outputs = parameters[2]
-        self.timers = parameters[3]
         self.routingTable = []
+        self.localIP = "127.0.0.1"
 
     def PrintParams(self):
-        """Print Parameters Used for Testing"""
-        print(self.id, self.inputs, self.outputs, self.timers, "\n")
+        """used for testing"""
+        print(self.id, self.inputs, self.outputs, self.routingTable, "\n")
+
         return
-    
+
+
     def OpenSockets(self):
-        for input in self.inputs:
-            return
+        """iterates over the inputs list and 
+        each of the sockets"""
+        #for socket in self.inputs:
+            #list.append(socket.socket)

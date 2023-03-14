@@ -10,9 +10,11 @@ import sys
 def main():
     routers = routerConfig.readFile(sys.argv[1])
     routersList = []
+    
     #initilises a router class for each router in the file 
     for strRouter in routers:
         currentRouter = routerConfig.getInfo(strRouter)
+
         routersList.append(Router(currentRouter))
         
 
