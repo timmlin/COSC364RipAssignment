@@ -12,6 +12,7 @@ class Router:
         self.outputs = parameters[2]
         self.routingTable = []
         self.localIP = "127.0.0.1"
+        self.sockets = {}
 
     def PrintParams(self):
         """used for testing"""
@@ -23,5 +24,5 @@ class Router:
     def OpenSockets(self):
         """iterates over the inputs list and 
         each of the sockets"""
-        #for socket in self.inputs:
-            #list.append(socket.socket)
+        for port in self.inputs:
+            self.sockets[port] = port
