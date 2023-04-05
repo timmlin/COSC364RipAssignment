@@ -10,6 +10,7 @@ def readFile(name):
     splits the file by line into a list of strings"""
     file = open(name, 'r')
     config = file.read().splitlines()
+    file.close()
     return config
 
     
@@ -46,12 +47,13 @@ def getInfo(info):
             outputList.append(int(value))
         processedOutputs.append(outputList)
 
+    # Allows for Timers to be set.
     if len(routerInfo) == 4:
         timers = (routerInfo[3].split(" ")[1:])
         for timer in timers:
             processedTimers.append(int(timer))
     else: 
-        processedTimers = [180, 30,30]
+        processedTimers = [180, 30, 30]
     
     return [id, processedInputs, processedOutputs, processedTimers]
 
