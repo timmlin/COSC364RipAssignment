@@ -1,7 +1,7 @@
 #Generates and processes RIP Response packets
 #Tim Lindbom & Benjamin Ireland 
 #23/2/23
-import socket
+import Router
 
 def GenerateResponse(router):
     """Generates response packet to be sent to other routers"""
@@ -11,4 +11,5 @@ def GenerateResponse(router):
     response[3] = router.id >> 4
     response[4] = router.id & 0xF #Router ID
     for route in router.routingTable:
+        RTE = bytearray(20)
         
