@@ -10,6 +10,8 @@ class Router:
         self.id = parameters[0]        
         self.inputs = parameters[1]
         self.outputs = parameters[2]
+
+        # Routing table must contain Router ID of Destenation, Metric, and next hop ID (Maybe Timers and flag) 
         self.routingTable = []
         self.localIP = "127.0.0.1"
         self.sockets = []
