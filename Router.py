@@ -12,13 +12,20 @@ class Router:
         self.outputs = parameters[2]
 
         # Routing table must contain Router ID of Destenation, Metric, and next hop ID (Maybe Timers and flag) 
-        self.routingTable = []
+        self.routingTable = {}
         self.localIP = "127.0.0.1"
         self.sockets = []
 
+        self.routingTable.update({self.id: [0,0,0]})
+
     def PrintParams(self):
         """used for testing"""
-        print(self.id, self.inputs, self.outputs, self.routingTable, self.sockets, "\n")
+
+        print( "id: ", self.id,"\n",\
+            "inputs: ", self.inputs,"\n",\
+            "outputs", self.outputs, "\n",\
+            "routing table: ", self.routingTable, "\n", \
+            "sockets: ", self.sockets, "\n")
 
         return
 
@@ -29,3 +36,9 @@ class Router:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.bind(('', port))
             self.sockets.append(sock)
+
+
+
+
+
+        

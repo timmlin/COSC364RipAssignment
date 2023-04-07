@@ -1,0 +1,4 @@
+#COSC364 git ignore
+
+_pycache_
+*.pdf
