@@ -29,7 +29,9 @@ def GenerateResponse(router):
     
     return response
 
-def SendResponse(router):
+def SendResponses(router):
     """Used to send a response message to a specified Port"""
-    for output in router.outputList:
-        
+    #for output in router.outputList:
+
+def ReadResponse(response):
+    """Used to unpack recieved response message to use in the Bellman Ford algorithm"""
