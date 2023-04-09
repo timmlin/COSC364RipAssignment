@@ -11,7 +11,7 @@ def GenerateResponse(router):
     response[1] = 2 # Version 2
     response[2] = router.id >> 8
     response[3] = router.id & 0xFF #Router ID
-    for route in router.routingTable:  # Assuming routing table is of the format [Router ID, Metric, etc.]
+    for route in router.routingTable:  # Assuming routing table is of the format [Router ID, Metric, etc.] // NEED TO CHANGE TO DICTIONARY
 
         # will need to account for fact that message can only be max 504 bytes and MIN 24 bytes 
         # Also need to address the the Split-Horizon Poisoned Reverse
@@ -51,8 +51,7 @@ def SendResponses(router):
         response = GenerateResponse(router)
         soc.sendto(response,(router.localIP, port))
         i += 1
-         
-        
+           
 
 def ReadResponse(response):
     """Used to unpack recieved response message to use in the Bellman Ford algorithm"""
