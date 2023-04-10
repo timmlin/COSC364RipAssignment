@@ -3,6 +3,7 @@
 #23/2/23
 from Router import  *
 import socket
+from BellmanFordAlgorithm import *
 
 def GenerateResponse(router):
     """Generates response packet to be sent to other routers"""
@@ -11,7 +12,7 @@ def GenerateResponse(router):
     response[1] = 2 # Version 2
     response[2] = router.id >> 8
     response[3] = router.id & 0xFF #Router ID
-    for route in router.routingTable:  # Assuming routing table is of the format [Router ID, Metric, etc.] // NEED TO CHANGE TO DICTIONARY
+    for routerID, route in router.routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
 
         # will need to account for fact that message can only be max 504 bytes and MIN 24 bytes 
         # Also need to address the the Split-Horizon Poisoned Reverse
@@ -25,8 +26,8 @@ def GenerateResponse(router):
         RTE[3] = 0x0
         RTE[4] = 0x0
         RTE[5] = 0x0
-        RTE[6] = route[1] >> 8          # Add Router ID
-        RTE[7] = route[1] & 0xFF
+        RTE[6] = routerID >> 8          # Add Router ID
+        RTE[7] = routerID & 0xFF
         RTE[8] = 0x0
         RTE[9] = 0x0
         RTE[10] = 0x0
@@ -37,8 +38,8 @@ def GenerateResponse(router):
         RTE[15] = 0x0
         RTE[16] = 0x0
         RTE[17] = 0x0
-        RTE[18] = route[2] & 0xFF00 # Add Metric to router
-        RTE[19] = route[2] & 0xFF
+        RTE[18] = route[0] & 0xFF00 # Add Metric to router
+        RTE[19] = route[0] & 0xFF
         response =  response + RTE      # Add RTE onto the end of response message
     return response
 
@@ -67,6 +68,12 @@ def ReadResponse(response):
         i += 20
     return [messageType, versionType, peerRouterID], peerRouterEntries
 
-
-# def AddInitRTE(router):
-#     """Adds initial route if table is empty"""
+router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])
+ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
+router1.PrintParams()
+ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+router1.PrintParams()
+UpdateRoute(router1, 4, 3, 1)
+router1.PrintParams()
+response = GenerateResponse(router1)
+print(ReadResponse(response))
