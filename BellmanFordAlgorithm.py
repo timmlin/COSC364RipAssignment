@@ -1,5 +1,5 @@
 #Bellman Ford Algorithm for use in a RIP routing protocol
-#Tim Lindbom & Ben Ireland 
+#Tim Lindbom & Benjamin Ireland 
 #23/2/23
 from Router import *
 
@@ -51,12 +51,12 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
             hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0]
 
 # router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
-router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])
-ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
-router1.PrintParams()
-ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-router1.PrintParams()
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
+# ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
+# router1.PrintParams()
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+# router1.PrintParams()
 
-UpdateRoute(router1, 4, 3, 1)
-router1.PrintParams()
+# UpdateRoute(router1, 4, 3, 1)
+# router1.PrintParams()
 

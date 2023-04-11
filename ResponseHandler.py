@@ -4,6 +4,8 @@
 from Router import  *
 import socket
 from BellmanFordAlgorithm import *
+import threading 
+import random
 
 def GenerateResponse(router):
     """Generates response packet to be sent to other routers"""
@@ -46,12 +48,14 @@ def GenerateResponse(router):
 def SendResponses(router):
     """Used to send a response message to a specified Port"""
     i = 0
-    while i < len(router.outputList) - 1:   # Enter a loop cycling through the output list and sending each peer router their designated message
-        port = router.outputList[i][0]
+    while i < len(router.outputs) - 1:   # Enter a loop cycling through the output list and sending each peer router their designated message
+        port = router.outputs[i][0]
         soc = router.sockets[i]
         response = GenerateResponse(router)
-        soc.sendto(response,(router.localIP, port))
+        soc.sendto(response, (router.localIP, port))
         i += 1
+    
+    
            
 
 def ReadResponse(response):
@@ -68,9 +72,35 @@ def ReadResponse(response):
         i += 20
     return [messageType, versionType, peerRouterID], peerRouterEntries
 
-router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])
+def ResponseTimer(router):
+    """Initialises the response timer for a specified router """
+    random.seed()
+    responseTimer = router.timers[0]
+    interval = random.randint(responseTimer - 5, responseTimer + 5)
+    print(interval)
+    SendResponses(router)
+    threading.Timer(interval, ResponseTimer, [router]).start()
+
+# ---- TESTING BASE FUNCTIONALITY ----
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])
+# ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
+# router1.PrintParams()
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+# router1.PrintParams()
+# UpdateRoute(router1, 4, 3, 1)
+# router1.PrintParams()
+# response = GenerateResponse(router1)
+# print(ReadResponse(response))
+
+# ---- TESTING SENDING FUNCTIONALITY ----
+router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [6, 180, 240]])
+router1.OpenSockets()
 ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
 router1.PrintParams()
+
+ResponseTimer(router1)
+
+
 ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
 router1.PrintParams()
 UpdateRoute(router1, 4, 3, 1)
