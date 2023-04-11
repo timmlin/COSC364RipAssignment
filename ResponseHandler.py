@@ -15,7 +15,7 @@ def GenerateResponse(router):
     response[1] = 2 # Version 2
     response[2] = router.id >> 8
     response[3] = router.id & 0xFF #Router ID
-    for routerID, route in router.routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
+    for entryID, route in router.routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
 
         # will need to account for fact that message can only be max 504 bytes and MIN 24 bytes 
         # Also need to address the the Split-Horizon Poisoned Reverse
@@ -29,8 +29,8 @@ def GenerateResponse(router):
         RTE[3] = 0x0
         RTE[4] = 0x0
         RTE[5] = 0x0
-        RTE[6] = routerID >> 8          # Add Router ID
-        RTE[7] = routerID & 0xFF
+        RTE[6] = entryID >> 8          # Add Router ID
+        RTE[7] = entryID & 0xFF
         RTE[8] = 0x0
         RTE[9] = 0x0
         RTE[10] = 0x0
@@ -75,7 +75,9 @@ def ReadResponse(response):
         i += 20
     return [messageType, versionType, peerRouterID], peerRouterEntries
 
-
+def TriggerUpdate(router):
+    """When called will iterate over the routingtable entries, if the route invalid flag is True then it will send an response packet"""
+    
 
 # ---- TESTING BASE FUNCTIONALITY ----
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])

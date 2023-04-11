@@ -24,7 +24,7 @@ def ResponseTimer(router):
 def InitTimeout(router, entryID):
     """Initialse the timeout timer"""
     timeoutVal = router.timers[1]
-    timeoutTimer = threading.Timer(timeoutVal, InitGarbageColector, [router, entryID])
+    timeoutTimer = threading.Timer(timeoutVal, Timeout, [router, entryID])
     timeoutTimer.start()
     return timeoutTimer
 
@@ -38,12 +38,14 @@ def ResetTimeout(router, entryID):
 
 
 
-def InitGarbageColector(router, entryID):
+def Timeout(router, entryID):
     """Initialises the garbage collector timer and processes the timeout"""
     garbageCollectionVal = router.timers[2]
     garbageCollectionTimer = threading.Timer(garbageCollectionVal, DeleteRoute, [router, entryID])
     garbageCollectionTimer.start()
-    return garbageCollectionTimer
+    router.routingTable[entryID][3][2] = garbageCollectionTimer
+    router.routingTable[entryID][0] = 16
+    router.routingTable[entryID][2] = 1
 
 
 

@@ -30,9 +30,8 @@ def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
 def AddNewRoute(hostRouter, peerRouterID, entryID, metric):
     """Adds a new route to the routing table if the entry does not exist"""
     if metric < 16:
-        routeChangeFlag = 0
         timeoutTimer = InitTimeout(hostRouter, entryID)
-        hostRouter.routingTable[entryID] = [metric, peerRouterID, routeChangeFlag, [timeoutTimer, None]]
+        hostRouter.routingTable[entryID] = [metric, peerRouterID, 0, [timeoutTimer, None]]
 
 
 def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
@@ -42,8 +41,7 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
     timeoutTimer = ResetTimeout(hostRouter, entryID) 
     if currentNextHopID == peerRouterID:
         if newMetric >= 16:
-            garbageColectionTimer = InitGarbageColector(hostRouter, entryID)
-            ### BEGIN ROUTE TEARDOWN P24,25
+            Timeout(hostRouter, entryID)
         elif newMetric != currentMetric:
             hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0, [timeoutTimer, None]]
     else:
