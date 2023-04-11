@@ -2,6 +2,9 @@
 #Tim Lindbom & Benjamin Ireland 
 #23/2/23
 from Router import *
+from Timer import *
+
+
 
 def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
     """Computes RIP routing algorithm and updates the routing table"""
@@ -28,26 +31,23 @@ def AddNewRoute(hostRouter, peerRouterID, entryID, metric):
     """Adds a new route to the routing table if the entry does not exist"""
     if metric < 16:
         routeChangeFlag = 0
-        hostRouter.routingTable[entryID] = [metric, peerRouterID, routeChangeFlag]
-        # InitRouteTimers() # yet to be implemented
+        timeoutTimer = InitTimeout(hostRouter, entryID)
+        hostRouter.routingTable[entryID] = [metric, peerRouterID, routeChangeFlag, [timeoutTimer, None]]
 
 
 def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
     """Updates the current route if ir has been changed and resets timers."""
     currentNextHopID = hostRouter.routingTable.get(entryID)[1]
     currentMetric = hostRouter.routingTable.get(entryID)[0]
+    timeoutTimer = ResetTimeout(hostRouter, entryID) 
     if currentNextHopID == peerRouterID:
-        #ResetTimeout() # yet to be implemented
         if newMetric >= 16:
-            i = 0
-            #InitDeletion()
+            garbageColectionTimer = InitGarbageColector(hostRouter, entryID)
+            ### BEGIN ROUTE TEARDOWN P24,25
         elif newMetric != currentMetric:
-            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0]
+            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0, [timeoutTimer, None]]
     else:
-        if newMetric >= 16:
-            i = 0
-            #InitDeletion()
-        elif newMetric < currentMetric:
+        if newMetric < currentMetric:
             hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0]
 
 # router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
