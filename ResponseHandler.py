@@ -13,6 +13,7 @@ def GenerateResponse(router, triggered=False):
      ###
     if triggered == True:
         routingTable = GetInvalidRoutes(router)
+        print(routingTable)
         if len(routingTable) == 0:
             return None
     else:
@@ -52,6 +53,7 @@ def SendResponses(router, triggered=False):
         port = router.outputs[i][0]
         soc = router.sockets[i]
         response = GenerateResponse(router, triggered)
+        print(triggered)
         if response != None:
             soc.sendto(response, (router.localIP, port))
             print("SENT")
@@ -79,14 +81,11 @@ def GetInvalidRoutes(router):
     """When called will iterate over the routing table entries, if the route invalid flag is True then it will add the route to a temporary dictionary"""
     invalidRoutes = {}
     for entryID, route in router.routingTable.items(): 
-        invalidFlag = route[3]
+        invalidFlag = route[2]
+        print(invalidFlag)
         if invalidFlag == True:
             invalidRoutes[entryID] = route
     return invalidRoutes
-
-def TriggerUpdate(router):
-    """When called will iterate over the routing table entries, if the route invalid flag is True then it will add """
-    SendResponses(router, True)
 
 
 # ---- TESTING BASE FUNCTIONALITY ----

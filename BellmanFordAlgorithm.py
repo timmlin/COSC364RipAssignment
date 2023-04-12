@@ -24,6 +24,7 @@ def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
             AddNewRoute(hostRouter, peerRouterID, entryID, metric)
         else:
             UpdateRoute(hostRouter, peerRouterID, entryID, metric)
+    hostRouter.PrintParams()
 
             
 
@@ -51,10 +52,7 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
 # router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
 # ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
-# router1.PrintParams()
 # ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-# router1.PrintParams()
-
 # UpdateRoute(router1, 4, 3, 1)
 # router1.PrintParams()
 
@@ -64,6 +62,6 @@ router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 24
 router1.OpenSockets()
 ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
 ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 16]])
-router1.PrintParams()
-TriggerUpdate(router1)
+SendResponses(router1, True)
+
 
