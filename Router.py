@@ -12,10 +12,12 @@ class Router:
         self.outputs = parameters[2]
         self.timers = parameters[3]
         # Routing table must contain Router ID of Destination, Metric, and next hop ID (Maybe Timers and flag) 
+        self.header = {}
         self.routingTable = {}
         self.localIP = "127.0.0.1"
         self.sockets = []
 
+        
         self.routingTable.update({self.id: [0,0,0, [None, None]]})      # Layout follows [Entry ID : Metric, Next-Hop, RouteInvalidFlag, [TimeOutTimer, GarbageTimer]
 
     def PrintParams(self):
