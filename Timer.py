@@ -16,7 +16,7 @@ def ResponseTimer(router):
     responseVal = router.timers[0]
     interval = random.randint(responseVal - 5, responseVal + 5)     # Uses the user specified timer value adding +- 5 seconds timer randomness as specified in RIP spec
     print(interval)
-    SendResponses(router)       # Sends Responses to neighbours and then starts the timer
+    SendResponses(router, GenerateResponse(router))       # Sends Responses to neighbours and then starts the timer
     threading.Timer(interval, ResponseTimer, [router]).start()
 
 
@@ -43,15 +43,17 @@ def Timeout(router, entryID):
     garbageCollectionVal = router.timers[2]
     garbageCollectionTimer = threading.Timer(garbageCollectionVal, DeleteRoute, [router, entryID])
     garbageCollectionTimer.start()
-    router.routingTable[entryID][3][2] = garbageCollectionTimer
+    router.routingTable[entryID][3][1] = garbageCollectionTimer
     router.routingTable[entryID][0] = 16
     router.routingTable[entryID][2] = 1
 
 
+def ClearGarbageCollection():
+    """"""
 
 def DeleteRoute(router, entryID):
     """Deletes the route from the routers routing table""" 
-    del router.routingTable[entryID]            # Might make redundent due to minimal amount of lines
+    del router.routingTable[entryID]            
 
 # # ---- TESTING SENDING FUNCTIONALITY ----
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [6, 180, 240]])

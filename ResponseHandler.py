@@ -6,16 +6,26 @@ from Router import  *
 import socket
 
 # TEST IMPORTS
-from BellmanFordAlgorithm import *
+# from BellmanFordAlgorithm import *
 
-def GenerateResponse(router):
+def GenerateResponse(router, triggered=False):
     """Generates response packet to be sent to other routers"""
+     ###
+    if triggered == True:
+        routingTable = GetInvalidRoutes(router)
+        if len(routingTable) == 0:
+            return None
+    else:
+        routingTable = router.routingTable
+    ###
     response = bytearray(4)
     response[0] = 2 # Indicating response message
     response[1] = 2 # Version 2
     response[2] = router.id >> 8
     response[3] = router.id & 0xFF #Router ID
-    for entryID, route in router.routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
+    
+   
+    for entryID, route in routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
 
         # will need to account for fact that message can only be max 504 bytes and MIN 24 bytes 
         # Also need to address the the Split-Horizon Poisoned Reverse
@@ -23,39 +33,28 @@ def GenerateResponse(router):
         # if router.id = learnedID or something along those lines
         
         RTE = bytearray(20)
-        RTE[0] = 0x0
-        RTE[1] = 0x0
-        RTE[2] = 0x0
-        RTE[3] = 0x0
-        RTE[4] = 0x0
-        RTE[5] = 0x0
+        # RTE[0:6] = 0x0
         RTE[6] = entryID >> 8          # Add Router ID
         RTE[7] = entryID & 0xFF
-        RTE[8] = 0x0
-        RTE[9] = 0x0
-        RTE[10] = 0x0
-        RTE[11] = 0x0
-        RTE[12] = 0x0
-        RTE[13] = 0x0
-        RTE[14] = 0x0
-        RTE[15] = 0x0
-        RTE[16] = 0x0
-        RTE[17] = 0x0
+        # RTE[8:18] = 0x0
         RTE[18] = route[0] & 0xFF00 # Add Metric to router
         RTE[19] = route[0] & 0xFF
         response =  response + RTE      # Add RTE onto the end of response message
+
     return response
 
 
 
-def SendResponses(router):
+def SendResponses(router, triggered=False):
     """Used to send a response message to a specified Port"""
     i = 0
     while i < len(router.outputs) - 1:   # Enter a loop cycling through the output list and sending each peer router their designated message
         port = router.outputs[i][0]
         soc = router.sockets[i]
-        response = GenerateResponse(router)
-        soc.sendto(response, (router.localIP, port))
+        response = GenerateResponse(router, triggered)
+        if response != None:
+            soc.sendto(response, (router.localIP, port))
+            print("SENT")
         i += 1
     
     
@@ -75,12 +74,23 @@ def ReadResponse(response):
         i += 20
     return [messageType, versionType, peerRouterID], peerRouterEntries
 
+
+def GetInvalidRoutes(router):
+    """When called will iterate over the routing table entries, if the route invalid flag is True then it will add the route to a temporary dictionary"""
+    invalidRoutes = {}
+    for entryID, route in router.routingTable.items(): 
+        invalidFlag = route[3]
+        if invalidFlag == True:
+            invalidRoutes[entryID] = route
+    return invalidRoutes
+
 def TriggerUpdate(router):
-    """When called will iterate over the routingtable entries, if the route invalid flag is True then it will send an response packet"""
-    
+    """When called will iterate over the routing table entries, if the route invalid flag is True then it will add """
+    SendResponses(router, True)
+
 
 # ---- TESTING BASE FUNCTIONALITY ----
-# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]]])
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4], [30, 180, 240]]])
 # ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
 # router1.PrintParams()
 # ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])

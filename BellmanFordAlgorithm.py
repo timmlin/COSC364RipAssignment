@@ -58,3 +58,12 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
 # UpdateRoute(router1, 4, 3, 1)
 # router1.PrintParams()
 
+
+# ---- TESTING TRIGGERED FUNCTIONALITY ----
+router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
+router1.OpenSockets()
+ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 16]])
+router1.PrintParams()
+TriggerUpdate(router1)
+
