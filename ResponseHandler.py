@@ -89,12 +89,9 @@ def GetInvalidRoutes(router):
 
 
 # ---- TESTING BASE FUNCTIONALITY ----
-# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4], [30, 180, 240]]])
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
 # ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
-# router1.PrintParams()
 # ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-# router1.PrintParams()
-# UpdateRoute(router1, 4, 3, 1)
 # router1.PrintParams()
 # response = GenerateResponse(router1)
 # print(ReadResponse(response))

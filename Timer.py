@@ -20,20 +20,35 @@ def GetResponseTime(router):
     return interval
 
 
-def CheckTimers(router, entryID):
-    """Used to update the timeout values for the route"""
-    systemTime = time.time()
-    timeoutTime = router.routingTable[entryID][3][0]
-    garbageColTime = router.routingTable[entryID][3][1]
+def CheckTimers(router):
+    """Used to check route timers, if there is a timeout the grabage collector will be started for that route.
+    If the Garbage Collector expires the route is deleted"""
 
-    if timeoutTime != None:
-        if systemTime >=  timeoutTime:
-            Timeout(router, entryID)
+    # Keep track of all routes that need to be deleted
+    garbageRoutes = []
 
+    for entry, route in router.routingTable.items():
+        systemTime = time.time()
+        timeoutTime = route[3][0]
+        garbageColTime = route[3][1]
 
-    elif garbageColTime != None:
-        if systemTime >= garbageColTime:
-            del router.routingTable[entryID]
+        # If the timeout is reset while the garbage colector is running we clear the garbage timer.
+        if timeoutTime != None and garbageColTime != None:
+            route[3][1] = None
+
+        # Check if a timeout has occured
+        elif timeoutTime != None and garbageColTime == None:
+            if systemTime >=  timeoutTime:
+                Timeout(router, entry)
+
+        # Track any routes that have expired
+        elif garbageColTime != None and timeoutTime == None:
+            if systemTime >= garbageColTime:
+               garbageRoutes.append(entry) 
+
+    # Delete expired routes
+    for garbageEntry in garbageRoutes:
+        del router.routingTable[garbageEntry]
 
 
 

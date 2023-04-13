@@ -70,10 +70,21 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
 # SendResponses(router1, True)
 
 # ---- TESTING TIMER FUNCTIONALITY ----
-router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [3, 4, 3]])
-ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
-ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-i = 0
-while(1):
-    for entry in router1.routingTable.keys():
-        CheckTimers(router1, entry)
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [3, 4, 3]])
+# ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+# i = 0
+# while(1):
+#     CheckTimers(router1)
+#     i += 1
+#     if i == 1000000:
+#         i = 0 
+#         router1.PrintParams()
+
+# ---- TESTING RESPONSE GENERATION AND READING ----
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
+# ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+# router1.PrintParams()
+# response = GenerateResponse(router1)
+# print(ReadResponse(response))
