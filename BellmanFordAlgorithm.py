@@ -54,6 +54,10 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
         if newMetric < currentMetric:
             hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0, [None, None]]
 
+
+
+
+# ---- TESTING ALGORITHM FUNCTIONALITY ----
 # router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
 # ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
@@ -86,5 +90,5 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
 # ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
 # ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
 # router1.PrintParams()
-# response = GenerateResponse(router1)
+# response = GenerateResponse(router1, 1)
 # print(ReadResponse(response))

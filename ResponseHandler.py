@@ -8,9 +8,10 @@ import socket
 # TEST IMPORTS
 # from BellmanFordAlgorithm import *
 
-def GenerateResponse(router, triggered=False):
+def GenerateResponse(router, recieverID, triggered=False):
     """Generates response packet to be sent to other routers"""
-     ###
+
+     ### Checks if the response is a triggered response send only the invalid routes
     if triggered == True:
         routingTable = GetInvalidRoutes(router)
         print(routingTable)
@@ -32,14 +33,21 @@ def GenerateResponse(router, triggered=False):
         # Also need to address the the Split-Horizon Poisoned Reverse
         # ie/ If a route is learned from that router set the metric to infinity
         # if router.id = learnedID or something along those lines
-        
+        learnedID = route[1]
+
         RTE = bytearray(20)
         # RTE[0:6] = 0x0
         RTE[6] = entryID >> 8          # Add Router ID
         RTE[7] = entryID & 0xFF
         # RTE[8:18] = 0x0
-        RTE[18] = route[0] & 0xFF00 # Add Metric to router
-        RTE[19] = route[0] & 0xFF
+
+        if recieverID == learnedID:
+            RTE[18] = 16 & 0xFF00       # If the route was learned from the router it sets the metric to INF 
+            RTE[19] = 16 & 0xFF
+        else:
+            RTE[18] = route[0] & 0xFF00 # Add Metric to router
+            RTE[19] = route[0] & 0xFF
+        
         response =  response + RTE      # Add RTE onto the end of response message
 
     return response
@@ -51,8 +59,9 @@ def SendResponses(router, triggered=False):
     i = 0
     while i < len(router.outputs) - 1:   # Enter a loop cycling through the output list and sending each peer router their designated message
         port = router.outputs[i][0]
+        recieverID = router.outputs[i][2]
         soc = router.sockets[i]
-        response = GenerateResponse(router, triggered)
+        response = GenerateResponse(router, recieverID, triggered)
         print(triggered)
         if response != None:
             soc.sendto(response, (router.localIP, port))
