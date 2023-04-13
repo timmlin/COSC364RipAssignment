@@ -18,36 +18,41 @@ def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
         entryMetric = entry[1]
         metric = min(entryMetric + linkCost, 16)
 
-        #Checks if router is in the table. If not add the router to table.
+        # Checks if router is in the table. If not add the router to table. Otherwise we update the route.
         entryID = entry[0]
         if entryID not in hostRouter.routingTable:    
             AddNewRoute(hostRouter, peerRouterID, entryID, metric)
         else:
             UpdateRoute(hostRouter, peerRouterID, entryID, metric)
-    hostRouter.PrintParams()
 
             
 
 def AddNewRoute(hostRouter, peerRouterID, entryID, metric):
     """Adds a new route to the routing table if the entry does not exist"""
     if metric < 16:
-        timeoutTimer = InitTimeout(hostRouter, entryID)
-        hostRouter.routingTable[entryID] = [metric, peerRouterID, 0, [timeoutTimer, None]]
+        # Adds the new router to the routing table and initialises the route timeout
+        hostRouter.routingTable[entryID] = [metric, peerRouterID, 0, [None, None]]
+        InitTimeout(hostRouter, entryID)
 
 
 def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
     """Updates the current route if ir has been changed and resets timers."""
     currentNextHopID = hostRouter.routingTable.get(entryID)[1]
     currentMetric = hostRouter.routingTable.get(entryID)[0]
-    timeoutTimer = ResetTimeout(hostRouter, entryID) 
+
+    # Check if the router the update is coming from is the same router as in routing table
     if currentNextHopID == peerRouterID:
+        # If the metric is greater infinity we start the Timeout process
         if newMetric >= 16:
             Timeout(hostRouter, entryID)
         elif newMetric != currentMetric:
-            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0, [timeoutTimer, None]]
+            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0, [None, None]]
+            InitTimeout(hostRouter, entryID)
+        else:
+            InitTimeout(hostRouter, entryID)
     else:
         if newMetric < currentMetric:
-            hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0]
+            hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0, [None, None]]
 
 # router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
@@ -58,10 +63,17 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
 
 
 # ---- TESTING TRIGGERED FUNCTIONALITY ----
-router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
-router1.OpenSockets()
+# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
+# router1.OpenSockets()
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
+# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 16]])
+# SendResponses(router1, True)
+
+# ---- TESTING TIMER FUNCTIONALITY ----
+router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [3, 4, 3]])
+ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
 ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 16]])
-SendResponses(router1, True)
-
-
+i = 0
+while(1):
+    for entry in router1.routingTable.keys():
+        CheckTimers(router1, entry)

@@ -2,7 +2,7 @@
 #Tim Lindbom & Benjamin Ireland 
 #23/2/23
 
-import threading 
+import time 
 import random
 from Router import *
 from ResponseHandler import *
@@ -10,50 +10,51 @@ from ResponseHandler import *
 # TEST IMPORTS
 #from BellmanFordAlgorithm import *
 
-def ResponseTimer(router):
-    """Initialises and runs the response timer for a specified router"""
-    random.seed()
+
+
+
+def GetResponseTime(router):
+    """Initialise the response timer for a specified router"""
     responseVal = router.timers[0]
-    interval = random.randint(responseVal - 5, responseVal + 5)     # Uses the user specified timer value adding +- 5 seconds timer randomness as specified in RIP spec
-    print(interval)
-    SendResponses(router, GenerateResponse(router))       # Sends Responses to neighbours and then starts the timer
-    threading.Timer(interval, ResponseTimer, [router]).start()
+    interval = random.uniform(responseVal * 0.8, responseVal*1.2)     # Uses the user specified timer value adding +- randomness as specified in RIP spec
+    return interval
+
+
+def CheckTimers(router, entryID):
+    """Used to update the timeout values for the route"""
+    systemTime = time.time()
+    timeoutTime = router.routingTable[entryID][3][0]
+    garbageColTime = router.routingTable[entryID][3][1]
+
+    if timeoutTime != None:
+        if systemTime >=  timeoutTime:
+            Timeout(router, entryID)
+
+
+    elif garbageColTime != None:
+        if systemTime >= garbageColTime:
+            del router.routingTable[entryID]
 
 
 
 def InitTimeout(router, entryID):
     """Initialse the timeout timer"""
     timeoutVal = router.timers[1]
-    timeoutTimer = threading.Timer(timeoutVal, Timeout, [router, entryID])
-    timeoutTimer.start()
-    return timeoutTimer
-
-
-
-def ResetTimeout(router, entryID):
-    """Resets the Timeout timer for a route"""
-    timeoutTimer = router.routingTable.get(entryID)[3][0]
-    timeoutTimer.cancel()
-    return InitTimeout(router, entryID)
+    timeoutTime = time.time() + timeoutVal
+    router.routingTable[entryID][3][0] = timeoutTime
 
 
 
 def Timeout(router, entryID):
     """Initialises the garbage collector timer and processes the timeout"""
     garbageCollectionVal = router.timers[2]
-    garbageCollectionTimer = threading.Timer(garbageCollectionVal, DeleteRoute, [router, entryID])
-    garbageCollectionTimer.start()
-    router.routingTable[entryID][3][1] = garbageCollectionTimer
+    garbageColTime = time.time() + garbageCollectionVal
+    router.routingTable[entryID][3][1] = garbageColTime
+    router.routingTable[entryID][3][0] = None
     router.routingTable[entryID][0] = 16
     router.routingTable[entryID][2] = 1
 
-
-def ClearGarbageCollection():
-    """"""
-
-def DeleteRoute(router, entryID):
-    """Deletes the route from the routers routing table""" 
-    del router.routingTable[entryID]            
+  
 
 # # ---- TESTING SENDING FUNCTIONALITY ----
 # router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [6, 180, 240]])
@@ -69,3 +70,7 @@ def DeleteRoute(router, entryID):
 # router1.PrintParams()
 # response = GenerateResponse(router1)
 # print(ReadResponse(response))
+
+router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [3, 18, 12]])
+
+print(GetResponseTime(router1))
