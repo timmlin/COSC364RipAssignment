@@ -11,15 +11,6 @@ from ResponseHandler import *
 #from BellmanFordAlgorithm import *
 
 
-
-
-def GetResponseTime(router):
-    """Initialise the response timer for a specified router"""
-    responseVal = router.timers[0]
-    interval = random.uniform(responseVal * 0.8, responseVal*1.2)     # Uses the user specified timer value adding +- randomness as specified in RIP spec
-    return interval
-
-
 def CheckTimers(router):
     """Used to check route timers, if there is a timeout the grabage collector will be started for that route.
     If the Garbage Collector expires the route is deleted"""
@@ -85,7 +76,3 @@ def Timeout(router, entryID):
 # router1.PrintParams()
 # response = GenerateResponse(router1)
 # print(ReadResponse(response))
-
-router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [3, 18, 12]])
-
-print(GetResponseTime(router1))
