@@ -21,7 +21,6 @@ def main():
     routerFile = routerConfig.readFile(sys.argv[1])
     routerInfo = routerConfig.getInfo(routerFile)   #Might rewrite
     router = Router(routerInfo)
-    router.PrintParams()
     # Opens the  all Sockets
     router.OpenSockets()
     router.PrintParams()
@@ -41,16 +40,21 @@ def main():
             SendResponses(router)
         else:
             # Wait for response messages to arrive 
-            readSockets, writeSockets, null = select([router.sockets],[],[], responsePeriod)
+            readSockets, writeSockets, null = select(router.sockets,[],[], router.timers[0])
+            print(f"{readSockets}\n")
+            if len(readSockets) != 0 :
+                for soc in readSockets:
 
-            for soc in readSockets:
-                headerInfo, peerRouterEntries = ReadResponse(soc.recvfrom(504))
+                    response, addr = soc.recvfrom(504)
+                    headerInfo, peerRouterEntries = ReadResponse(response)
+                    print(headerInfo, peerRouterEntries)
+                    peerRouterID = headerInfo[2]
 
-                peerRouterID = headerInfo[2]
+                    ComputeRoutingAlgorithm(router, peerRouterID, peerRouterEntries)
 
-                ComputeRoutingAlgorithm(router, peerRouterID, peerRouterEntries)
+                    SendResponses(router, True)
 
-                SendResponses(router, True)
+            router.PrintParams()
             
 
             

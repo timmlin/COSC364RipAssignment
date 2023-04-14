@@ -10,6 +10,7 @@ def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
     """Computes RIP routing algorithm and updates the routing table"""
     for entry in peerRouterEntries: 
         # Match the Peer Router ID to one of the IDs in the output list to get the cost of the link 
+        print(hostRouter.outputs)
         for output in hostRouter.outputs:
             outputRouterID = output[2] 
             outputCost = output[1]
@@ -36,7 +37,7 @@ def AddNewRoute(hostRouter, peerRouterID, entryID, metric):
 
 
 def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
-    """Updates the current route if ir has been changed and resets timers."""
+    """Updates the current route if it has been changed and resets timers."""
     currentNextHopID = hostRouter.routingTable.get(entryID)[1]
     currentMetric = hostRouter.routingTable.get(entryID)[0]
 

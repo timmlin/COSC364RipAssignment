@@ -14,7 +14,6 @@ def GenerateResponse(router, recieverID, triggered=False):
      ### Checks if the response is a triggered response send only the invalid routes
     if triggered == True:
         routingTable = GetInvalidRoutes(router)
-        print(routingTable)
         if len(routingTable) == 0:
             return None
     else:
@@ -57,15 +56,13 @@ def GenerateResponse(router, recieverID, triggered=False):
 def SendResponses(router, triggered=False):
     """Used to send a response message to a specified Port"""
     i = 0
-    while i < len(router.outputs) - 1:   # Enter a loop cycling through the output list and sending each peer router their designated message
+    while i < len(router.outputs):   # Enter a loop cycling through the output list and sending each peer router their designated message
         port = router.outputs[i][0]
         recieverID = router.outputs[i][2]
         soc = router.sockets[i]
         response = GenerateResponse(router, recieverID, triggered)
-        print(triggered)
         if response != None:
             soc.sendto(response, (router.localIP, port))
-            print("SENT")
         i += 1
     
     
@@ -75,8 +72,8 @@ def ReadResponse(response):
     """Used to unpack recieved response message to use in the Bellman Ford algorithm"""
     i = 0
     peerRouterEntries = []
-    responseHeader = bytearray(response[:4]) # Will need to query to see why this was done previously
-    entries = bytearray(response[4:])
+    responseHeader = response[:4] # Will need to query to see why this was done previously
+    entries = response[4:]
     messageType = responseHeader[0]         # Gets the message, version, and router ID
     versionType = responseHeader[1]
     peerRouterID = responseHeader[2] << 8 | response[3]
@@ -91,7 +88,6 @@ def GetInvalidRoutes(router):
     invalidRoutes = {}
     for entryID, route in router.routingTable.items(): 
         invalidFlag = route[2]
-        print(invalidFlag)
         if invalidFlag == True:
             invalidRoutes[entryID] = route
     return invalidRoutes

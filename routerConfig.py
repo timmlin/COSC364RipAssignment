@@ -15,7 +15,8 @@ def readFile(name):
 
     
 def getInfo(info):
-    routerInfo = info.split(", ") 
+    print(info)
+    routerInfo = info[0].split(", ") 
     processedInputs = []
     processedOutputs = []
     processedTimers = []

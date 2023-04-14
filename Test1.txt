@@ -1,0 +1,1 @@
+router_id 1, inputs 1124 1125, outputs 1024-1-0 1225-3-2, timer 10 60 40
