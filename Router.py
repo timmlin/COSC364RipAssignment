@@ -18,7 +18,7 @@ class Router:
         self.sockets = []
 
         
-        self.routingTable.update({self.id: [0,0,0, [None, None]]})      # Layout follows [Entry ID : Metric, Next-Hop, RouteInvalidFlag, [TimeOutTimer, GarbageTimer]
+        self.routingTable.update({self.id: [0, self.id, 0, [None, None]]})      # Layout follows [Entry ID : Metric, Next-Hop, RouteInvalidFlag, [TimeOutTimer, GarbageTimer]
 
     def PrintParams(self):
         """used for testing"""

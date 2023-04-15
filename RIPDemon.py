@@ -54,7 +54,7 @@ def main():
 
                     SendResponses(router, True)
 
-            router.PrintParams()
+            print(router.routingTable)
             
 
             

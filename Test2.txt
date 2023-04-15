@@ -1,1 +1,1 @@
-router_id 2, inputs 1224 1225, outputs 1025-1-0 1125-3-1, timer 10 60 40
+router_id 2, inputs 1224 1225, outputs 1025-1-0 1125-3-1
