@@ -1,2 +1,0 @@
-router_id 0, inputs 701 702 777, outputs 5000-1-1 5002-5-4
-router_id 1, inputs 5000 745 789, outputs 6789-2-6 7879-5-4, timer 6 7 8

@@ -1,0 +1,1 @@
+router_id 6, inputs 1601 1605, outputs 1106-5-1 1506-1-5
