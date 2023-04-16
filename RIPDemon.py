@@ -23,7 +23,7 @@ def main():
     router = Router(routerInfo)
     # Opens the  all Sockets
     router.OpenSockets()
-    router.PrintParams()
+    router.PrintTable()
 
     # Set up response timer 
     responsePeriod = GetResponseTime(router)
@@ -62,8 +62,8 @@ def main():
                     CheckTimers(router)
                     SendResponses(router, True)
 
-            if printTable == True:
-                router.PrintTable()
+            # if printTable == True:
+            router.PrintTable()
 
             
 

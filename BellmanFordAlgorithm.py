@@ -44,7 +44,8 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
     # Check if the router the update is coming from is the same router as in routing table
     if currentNextHopID == peerRouterID:
         # If the metric is greater infinity we start the Timeout process
-        if newMetric >= 16:
+        if newMetric >= 16 and currentMetric != newMetric:
+            print("Start Garb")
             Timeout(hostRouter, entryID)
         elif newMetric != currentMetric:
             hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 1, [None, None]]
@@ -55,6 +56,7 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
     else:
         if newMetric < currentMetric:
             hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 1, [None, None]]
+            InitTimeout(hostRouter, entryID)
 
 
 

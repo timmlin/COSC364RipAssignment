@@ -47,16 +47,16 @@ class Router:
         for entry, route in self.routingTable.items():
 
             if route[3][0] == None:
-                timeoutTimer = self.timers[1]
+                timeoutTimer = f"{'-':^9}"
             else: 
-                timeoutTimer = route[3][0] - sysTime
+                timeoutTimer = f"{(route[3][0] - sysTime):^9.2f}"
 
             if route[3][1] == None:
-                garbTimer = self.timers[2]
+                garbTimer = f"{'-':^20}"
             else: 
-                garbTimer = route[3][1] - sysTime
+                garbTimer = f"{(route[3][1] - sysTime):^20.2f}"
             
-            table = table + f"|{entry:^13}|{route[0]:^6}|{route[1]:^10}|{timeoutTimer:^9.2f}|{garbTimer:^20.2f}|\n"
+            table = table + f"|{entry:^13}|{route[0]:^6}|{route[1]:^10}|{timeoutTimer}|{garbTimer}|\n"
         print(table)
 
             

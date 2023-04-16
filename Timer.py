@@ -14,7 +14,7 @@ from ResponseHandler import *
 def CheckTimers(router):
     """Used to check route timers, if there is a timeout the grabage collector will be started for that route.
     If the Garbage Collector expires the route is deleted"""
-
+    print("Checking Timers")
     # Keep track of all routes that need to be deleted
     garbageRoutes = []
 
@@ -30,11 +30,13 @@ def CheckTimers(router):
         # Check if a timeout has occured
         elif timeoutTime != None and garbageColTime == None:
             if systemTime >=  timeoutTime:
+                print("Timer Timeout")
                 Timeout(router, entry)
 
         # Track any routes that have expired
         elif garbageColTime != None and timeoutTime == None:
             if systemTime >= garbageColTime:
+               print("Trash")
                garbageRoutes.append(entry) 
 
     # Delete expired routes
