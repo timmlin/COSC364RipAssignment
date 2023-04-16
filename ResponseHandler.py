@@ -87,8 +87,9 @@ def GetInvalidRoutes(router):
     """When called will iterate over the routing table entries, if the route invalid flag is True then it will add the route to a temporary dictionary"""
     invalidRoutes = {}
     for entryID, route in router.routingTable.items(): 
-        invalidFlag = route[2]
-        if invalidFlag == True:
+        routeChangeFlag = route[2]
+        metric = route[0]
+        if routeChangeFlag == True and metric == 16:
             invalidRoutes[entryID] = route
     return invalidRoutes
 

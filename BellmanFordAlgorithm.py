@@ -10,7 +10,7 @@ def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
     """Computes RIP routing algorithm and updates the routing table"""
     for entry in peerRouterEntries: 
         # Match the Peer Router ID to one of the IDs in the output list to get the cost of the link 
-        print(hostRouter.outputs)
+        
         for output in hostRouter.outputs:
             outputRouterID = output[2] 
             outputCost = output[1]
@@ -32,7 +32,7 @@ def AddNewRoute(hostRouter, peerRouterID, entryID, metric):
     """Adds a new route to the routing table if the entry does not exist"""
     if metric < 16:
         # Adds the new router to the routing table and initialises the route timeout
-        hostRouter.routingTable[entryID] = [metric, peerRouterID, 0, [None, None]]
+        hostRouter.routingTable[entryID] = [metric, peerRouterID, 1, [None, None]]
         InitTimeout(hostRouter, entryID)
 
 
@@ -47,13 +47,14 @@ def UpdateRoute(hostRouter, peerRouterID, entryID, newMetric):
         if newMetric >= 16:
             Timeout(hostRouter, entryID)
         elif newMetric != currentMetric:
-            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 0, [None, None]]
+            hostRouter.routingTable[entryID] = [newMetric, currentNextHopID, 1, [None, None]]
             InitTimeout(hostRouter, entryID)
         else:
+            hostRouter.routingTable[entryID][2] = 0
             InitTimeout(hostRouter, entryID)
     else:
         if newMetric < currentMetric:
-            hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 0, [None, None]]
+            hostRouter.routingTable[entryID] = [newMetric, peerRouterID, 1, [None, None]]
 
 
 

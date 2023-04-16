@@ -40,21 +40,28 @@ def main():
             SendResponses(router)
         else:
             # Wait for response messages to arrive 
+            printTable = False
             readSockets, writeSockets, null = select(router.sockets,[],[], router.timers[0])
-            print(f"{readSockets}\n")
             if len(readSockets) != 0 :
                 for soc in readSockets:
-
-                    response, addr = soc.recvfrom(504)
+                    try:
+                        response, addr = soc.recvfrom(504)
+                    except ConnectionResetError:
+                        continue
+                    
                     headerInfo, peerRouterEntries = ReadResponse(response)
-                    print(headerInfo, peerRouterEntries)
+
                     peerRouterID = headerInfo[2]
 
                     ComputeRoutingAlgorithm(router, peerRouterID, peerRouterEntries)
-
+                    for route in router.routingTable.values():
+                        routeChangeFlag = route[2]
+                        if routeChangeFlag == 1:
+                            printTable = True
                     SendResponses(router, True)
 
-            print(router.routingTable)
+            if printTable == True:
+                print(router.routingTable)
             
 
             
