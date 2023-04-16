@@ -58,11 +58,12 @@ def main():
                         routeChangeFlag = route[2]
                         if routeChangeFlag == 1:
                             printTable = True
+                    
+                    CheckTimers(router)
                     SendResponses(router, True)
 
             if printTable == True:
-                print(router.routingTable)
-            
+                router.PrintTable()
 
             
 

@@ -54,7 +54,7 @@ def getInfo(info):
         for timer in timers:
             processedTimers.append(int(timer))
     else: 
-        processedTimers = [10, 180, 120]
+        processedTimers = [5, 15, 30]
     
     return [id, processedInputs, processedOutputs, processedTimers]
 

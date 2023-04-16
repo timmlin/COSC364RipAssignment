@@ -89,7 +89,7 @@ def GetInvalidRoutes(router):
     for entryID, route in router.routingTable.items(): 
         routeChangeFlag = route[2]
         metric = route[0]
-        if routeChangeFlag == True and metric == 16:
+        if routeChangeFlag == 1 and metric == 16:
             invalidRoutes[entryID] = route
     return invalidRoutes
 

@@ -2,7 +2,7 @@
 #Tim Lindbom & Ben Ireland
 #8/3/23
 
-import socket
+import socket, time
 
 class Router:
 
@@ -40,7 +40,23 @@ class Router:
             self.sockets.append(sock)
 
 
+    def PrintTable(self):
+        """Prints a formatted version of the routing table"""
+        sysTime = time.time()
+        table = f"ROUTER ID: {self.id}\n| DESTINATION | COST | NEXT-HOP | TIMEOUT | GARBAGE COLLECTION |\n"
+        for entry, route in self.routingTable.items():
 
+            if route[3][0] == None:
+                timeoutTimer = self.timers[1]
+            else: 
+                timeoutTimer = route[3][0] - sysTime
 
+            if route[3][1] == None:
+                garbTimer = self.timers[2]
+            else: 
+                garbTimer = route[3][1] - sysTime
+            
+            table = table + f"|{entry:^13}|{route[0]:^6}|{route[1]:^10}|{timeoutTimer:^9.2f}|{garbTimer:^20.2f}|\n"
+        print(table)
 
-        
+            
