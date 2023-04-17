@@ -60,10 +60,9 @@ def main():
                             printTable = True
                     
                     CheckTimers(router)
-                    SendResponses(router, True)
 
-            # if printTable == True:
-            router.PrintTable()
+            if printTable == True:
+                router.PrintTable()
 
             
 
