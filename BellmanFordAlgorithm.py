@@ -5,7 +5,6 @@ from Router import *
 from Timer import *
 
 
-
 def ComputeRoutingAlgorithm(hostRouter, peerRouterID, peerRouterEntries):
     """Computes RIP routing algorithm and updates the routing table"""
     for entry in peerRouterEntries: 

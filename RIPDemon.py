@@ -2,11 +2,16 @@
 #Tim Lindbom & Ben Ireland
 #8/3/23
 
-from Router import *
-from ResponseHandler import *
-from BellmanFordAlgorithm import *
+import random
+import sys
+import time
 from select import select
-import sys, random, routerConfig, time
+
+import routerConfig
+from BellmanFordAlgorithm import *
+from ResponseHandler import *
+from Router import *
+
 
 def GetResponseTime(router):
     """Initialise the response timer for a specified router"""

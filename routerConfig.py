@@ -3,6 +3,7 @@
 #8/3/23
 
 import sys
+import ErrorHandler
 
 
 def readFile(name):
@@ -21,32 +22,46 @@ def getInfo(info):
     processedOutputs = []
     processedTimers = []
 
-    
-    id = (routerInfo[0].split(" ")[1])
-    inputs = routerInfo[1].split(" ")[1:]
-    outputs = routerInfo[2].split(" ")[1:]
+    try:
+        #id represents a unique identifier for each router
+        id = (routerInfo[0].split(" ")[1])
+    except IndexError:
+        print("invalid router ID \n Please make sure the router ID configuartion follows the specified configuarion")
+        sys.exit()
+
+    try:
+        #inputs is a list of ports that a router can receive data from
+        inputs = routerInfo[1].split(" ")[1:]
+    except IndexError:
+        print("ivalid input routers \n Please make sure the router inputs configuartion follows the specified configuarion")
+        sys.exit()
+
+    try:
+        #outputs is a nested list each list in outputs represents a port that the
+        #router can output data. Each inner list is of the form [x, y, z] where
+        #x is the port number, y is the weight/distance and z is the recieving router
+        outputs = routerInfo[2].split(" ")[1:]
+    except IndexError:
+        print("Invalid Output Router configuration \n Please make sure the router outputs configuartion follows the specified configuarion")
+        sys.exit()
 
 
-    #id represents a unique identifier for each router
-    numericCheck(id)
-    id = int(id)
+    #runs error checks on the id value
+    #if all the tests pass, id is converted to an int
+    id = ErrorHandler.RouterIdCheck(id)
 
-    #inputs is a list of ports that a router can receive data from
-    for input in inputs:
-            numericCheck(input)
-            processedInputs.append(int(input))
+    #error checks the inputs values. If all tests passes
+    #processed inputs is assigned to a list of ints of the port numbers 
+    processedInputs = ErrorHandler.RouterInputsCheck(inputs)
+ 
 
-
-    #outputs is a nested list each list in outputs represents a port that the
-    #router can output data. Each inner list is of the form [x, y, z] where
-    #x is the port number, y is the weight/distance and z is the recieving router
     for output in outputs:
         outputData = output.split("-")
-        outputList = []
-        for value in outputData:
-            numericCheck(value)
-            outputList.append(int(value))
+        outputList = ErrorHandler.RouterOutputCheck(outputData)
         processedOutputs.append(outputList)
+
+
+
 
     # Allows for Timers to be set.
     if len(routerInfo) == 4:
@@ -54,14 +69,10 @@ def getInfo(info):
         for timer in timers:
             processedTimers.append(int(timer))
     else: 
-        processedTimers = [30, 180, 120] # T, 6*T, 4*T 
+        processedTimers = [30, 180, 120]  #[T, 6*T, 4*T]
     
     return [id, processedInputs, processedOutputs, processedTimers]
 
 
-def numericCheck(value):
-    """'''"""
-    if value.isnumeric() == False:
-        print(f"'{value}' is not a numeric value, please input a numeric value") 
-        sys.exit()
+
     

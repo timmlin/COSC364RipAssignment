@@ -2,10 +2,11 @@
 #Tim Lindbom & Benjamin Ireland 
 #23/2/23
 
-import time 
 import random
-from Router import *
+import time
+
 from ResponseHandler import *
+from Router import *
 
 # TEST IMPORTS
 #from BellmanFordAlgorithm import *

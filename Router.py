@@ -2,7 +2,9 @@
 #Tim Lindbom & Ben Ireland
 #8/3/23
 
-import socket, time
+import socket
+import time
+
 
 class Router:
 
