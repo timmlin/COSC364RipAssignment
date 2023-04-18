@@ -77,6 +77,8 @@ def ReadResponse(response):
     messageType = responseHeader[0]         # Gets the message, version, and router ID
     versionType = responseHeader[1]
     peerRouterID = responseHeader[2] << 8 | response[3]
+
+    ##ERROR
     while i < len(entries) - 1:             # Adds each router entry into a list
         peerRouterEntries.append([entries[i + 6] << 8 | entries[i + 7], entries[i + 18] << 8 | entries[i + 19]])
         i += 20
@@ -94,10 +96,3 @@ def GetInvalidRoutes(router):
     return invalidRoutes
 
 
-# ---- TESTING BASE FUNCTIONALITY ----
-# router1 = Router([0, [701, 702, 777], [[5000, 1, 1], [5002, 5, 4]], [30, 180, 240]])
-# ComputeRoutingAlgorithm(router1, 1, [[1, 0], [3, 3]])
-# ComputeRoutingAlgorithm(router1, 4, [[4, 0], [3, 2]])
-# router1.PrintParams()
-# response = GenerateResponse(router1)
-# print(ReadResponse(response))

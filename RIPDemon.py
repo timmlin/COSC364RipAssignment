@@ -26,7 +26,7 @@ def main():
     router.PrintTable()
 
     # Set up response timer 
-    responsePeriod = GetResponseTime(router)
+    responsePeriod = GetResponseTime(router)  
     sysTime = time.time()
     responseTimer = responsePeriod  + sysTime
 
@@ -54,6 +54,8 @@ def main():
                     peerRouterID = headerInfo[2]
 
                     ComputeRoutingAlgorithm(router, peerRouterID, peerRouterEntries)
+
+                    # Check if there has been a change to the routes
                     for route in router.routingTable.values():
                         routeChangeFlag = route[2]
                         if routeChangeFlag == 1:
