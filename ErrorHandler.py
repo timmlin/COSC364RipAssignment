@@ -13,50 +13,78 @@ def RouterIdCheck(id):
     if not (1 <= id <= 64000):
         print(f"{id} is not a valid ID number. \
               \n please give an id value between 1 and 64000")
-        sys.exit
+        sys.exit()
 
     return id
 
 
-def RouterInputsCheck(inputs):
+
+
+def RouterOutputCheck(outputs):
+    """performs error checks on the output lists. 
+    Returns list of all the output port info 
+    as well as a list of just output port numbers"""
+    processedOutputs = []
+    portNumbers = []
+
+    for output in outputs:
+        outputData = output.split("-")
+
+        index = 0
+
+        for value in outputData:
+            numericCheck(value)
+            processedOutputs.append(int(value))
+            if index == 0:
+                portNumbers.append(value)
+            index += 1 
+
+    PortNumberChecks(portNumbers)
+
+    return (processedOutputs, portNumbers)
+
+
+
+def PortNumberChecks(portNumbers):
     """perfroms error checks on each 
     input port number in the inputs list
     and returns a list of processed inputs"""
-    processedInputs = []
-    for inputNum in inputs:
 
-        numericCheck(inputNum)
-        inputNum = int(inputNum)
+    processedPortNumbers = []
 
-        if not (1024 <= inputNum <= 64000):
-            print(f"input port number {inputNum} is not a valid port number. \n \
+    for portNum in portNumbers:
+
+        numericCheck(portNum)
+        portNum = int(portNum)
+
+        if not (1024 <= portNum <= 64000):
+            print(f"input port number {portNum} is not a valid port number. \n \
                   Please make sure all input numbers are within 1024-64000")
-            sys.exit
+            sys.exit()
 
-        if inputNum in processedInputs:
-            print(f"input port number {inputNum} has been used more than once. \n \
+        if portNum in processedPortNumbers:
+            print(f"input port number {portNum} has been used more than once. \n \
                   Please make sure all input numbers are unique")
-            sys.exit
+            sys.exit()
 
-        processedInputs.append(inputNum)
+        processedPortNumbers.append(portNum)
 
-    return processedInputs
-
-
-def RouterOutputCheck(outputData):
-    """performs error checks on the output lists
-    and returns a proccessed list of ints"""
-    processedOutputs = []
-
-    for value in outputData:
-        numericCheck(value)
-        processedOutputs.append(int(value))
-
-    return processedOutputs
+    return processedPortNumbers
 
 
 
-
+def CompareInputsOutputs(inputs, outputs):
+    """comapres the input port and output port lists to 
+    make sure that no ports appear in both lists"""
+    for inputPort in inputs:
+        if inputPort in outputs:
+            print(f"port number {inputPort} appears in both inputs and outputs")
+            sys.exit()
+    
+    for outputPort in outputs:
+        if outputPort in inputs:
+            print(f"port number {outputPort} appears in both inputs and outputs")
+            sys.exit()
 
 
 
