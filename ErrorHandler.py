@@ -29,15 +29,17 @@ def RouterOutputCheck(outputs):
 
     for output in outputs:
         outputData = output.split("-")
-
+        tempOutputs = []
         index = 0
 
         for value in outputData:
             numericCheck(value)
-            processedOutputs.append(int(value))
+            tempOutputs.append(int(value))
             if index == 0:
                 portNumbers.append(value)
-            index += 1 
+            index += 1
+             
+        processedOutputs.append(tempOutputs)
 
     PortNumberChecks(portNumbers)
 
@@ -93,4 +95,17 @@ def numericCheck(value):
     is the correct the correct type  """
     if value.isnumeric() == False:
         print(f"'{value}' is not a numeric value, please input a numeric value")
+        sys.exit()
+
+
+
+def TimerChecks(timers):
+    """runs error check on the timer values"""
+    firstTimer = timers[0]
+    
+    if (timers[1] == 6*firstTimer) & (timers[2] == 4*firstTimer):
+        return timers  
+    else:
+        print(f"timer values do not follow the correct format \n \
+              please make sure the timers follow the [T, 6*T, 4*T] formatting")
         sys.exit()

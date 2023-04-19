@@ -2,8 +2,10 @@
 #Tim Lindbom & Benjamin Ireland 
 #23/2/23
 
-from Router import  *
 import socket
+
+import ErrorHandler
+import Router
 
 # TEST IMPORTS
 # from BellmanFordAlgorithm import *

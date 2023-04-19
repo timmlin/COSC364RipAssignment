@@ -46,31 +46,41 @@ def getInfo(info):
         sys.exit()
 
 
+    # Allows for Timers to be set.
+    timers = []
+    if len(routerInfo) == 4:
+        tempTimers = (routerInfo[3].split(" ")[1:])
+        for timer in tempTimers:
+            timers.append(int(timer))
+    else: 
+        timers = [30, 180, 120]  #[T, 6*T, 4*T]
+
+
+#--------------------------------------------------------
+#------------------ERROR-CHECKS--------------------------
+#--------------------------------------------------------
+
+
     #runs error checks on the id value
     #if all the tests pass, id is converted to an int
     id = ErrorHandler.RouterIdCheck(id)
 
     #error checks the inputs values. If all tests passes
     #processed inputs is assigned to a list of ints of the port numbers 
-    processedInputs = ErrorHandler.RouterInputsCheck(inputs)
+    processedInputs = ErrorHandler.PortNumberChecks(inputs)
  
+    #processedOutputs conatins all the output port inormation
+    #outputPortNumbers is just the port numbers
+    processedOutputs, outputPortNumbers = ErrorHandler.RouterOutputCheck(outputs)
 
-    for output in outputs:
-        outputData = output.split("-")
-        outputList = ErrorHandler.RouterOutputCheck(outputData)
-        processedOutputs.append(outputList)
+    #comapres the input/output port number to confirm that none appear in both lists
+    #ErrorHandler.CompareInputsOutputs(processedInputs, outputPortNumbers)
 
+    #makes sure the timer values follow the correct formatting
+    processedTimers = ErrorHandler.TimerChecks(timers)
 
-
-
-    # Allows for Timers to be set.
-    if len(routerInfo) == 4:
-        timers = (routerInfo[3].split(" ")[1:])
-        for timer in timers:
-            processedTimers.append(int(timer))
-    else: 
-        processedTimers = [30, 180, 120]  #[T, 6*T, 4*T]
     
+
     return [id, processedInputs, processedOutputs, processedTimers]
 
 
