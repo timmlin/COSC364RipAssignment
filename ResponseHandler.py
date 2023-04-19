@@ -90,10 +90,6 @@ def ReadResponse(response):
     if versionType != 2:
         print("version type must be '2'")
         sys.exit()
-
-    print("\n", entries, "\n")
-
-
 #--------------------------------------------------------------------
 
 
