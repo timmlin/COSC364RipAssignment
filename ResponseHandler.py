@@ -3,6 +3,7 @@
 #23/2/23
 
 import socket
+import sys
 
 import ErrorHandler
 import Router
@@ -20,7 +21,8 @@ def GenerateResponse(router, recieverID, triggered=False):
             return None
     else:
         routingTable = router.routingTable
-    ###
+
+
     response = bytearray(4)
     response[0] = 2 # Indicating response message
     response[1] = 2 # Version 2
@@ -80,7 +82,22 @@ def ReadResponse(response):
     versionType = responseHeader[1]
     peerRouterID = responseHeader[2] << 8 | response[3]
 
-    ##ERROR
+
+#---------------------ERROR-CHECKS-----------------------------------
+    if messageType != 2:
+        print("message type must be '2'")    
+        sys.exit()
+    if versionType != 2:
+        print("version type must be '2'")
+        sys.exit()
+
+    print("\n", entries, "\n")
+
+
+#--------------------------------------------------------------------
+
+
+
     while i < len(entries) - 1:             # Adds each router entry into a list
         peerRouterEntries.append([entries[i + 6] << 8 | entries[i + 7], entries[i + 18] << 8 | entries[i + 19]])
         i += 20
