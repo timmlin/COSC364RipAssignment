@@ -24,7 +24,7 @@ def GetResponseTime(router):
 def main():
     # Reads router config file and creates a router object
     routerFile = routerConfig.readFile(sys.argv[1])
-    routerInfo = routerConfig.getInfo(routerFile)   #Might rewrite
+    routerInfo = routerConfig.getInfo(routerFile)   
     router = Router(routerInfo)
     # Opens the  all Sockets
     router.OpenSockets()
@@ -37,7 +37,8 @@ def main():
 
     # Enter the main program loop
     while 1:
-
+        
+        # Check if its time to send a response
         sysTime = time.time()
         if sysTime >= responseTimer:
             responsePeriod = GetResponseTime(router)

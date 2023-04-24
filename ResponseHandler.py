@@ -4,7 +4,6 @@
 
 import socket
 import sys
-
 import ErrorHandler
 import Router
 
@@ -30,19 +29,13 @@ def GenerateResponse(router, recieverID, triggered=False):
     response[3] = router.id & 0xFF #Router ID
     
    
-    for entryID, route in routingTable.items():  # Assuming routing table is of the format {Router ID: Metric, etc.} // NEED TO CHANGE TO DICTIONARY
+    for entryID, route in routingTable.items():  
 
-        # will need to account for fact that message can only be max 504 bytes and MIN 24 bytes 
-        # Also need to address the the Split-Horizon Poisoned Reverse
-        # ie/ If a route is learned from that router set the metric to infinity
-        # if router.id = learnedID or something along those lines
         learnedID = route[1]
 
         RTE = bytearray(20)
-        # RTE[0:6] = 0x0
         RTE[6] = entryID >> 8          # Add Router ID
         RTE[7] = entryID & 0xFF
-        # RTE[8:18] = 0x0
 
         if recieverID == learnedID:
             RTE[18] = 16 & 0xFF00       # If the route was learned from the router it sets the metric to INF 
@@ -76,7 +69,7 @@ def ReadResponse(response):
     """Used to unpack recieved response message to use in the Bellman Ford algorithm"""
     i = 0
     peerRouterEntries = []
-    responseHeader = response[:4] # Will need to query to see why this was done previously
+    responseHeader = response[:4]
     entries = response[4:]
     messageType = responseHeader[0]         # Gets the message, version, and router ID
     versionType = responseHeader[1]
