@@ -8,9 +8,6 @@ import time
 from ResponseHandler import *
 from Router import *
 
-# TEST IMPORTS
-#from BellmanFordAlgorithm import *
-
 
 def CheckTimers(router):
     """Used to check route timers, if there is a timeout the grabage collector will be started for that route.
