@@ -1,4 +1,4 @@
 #COSC364 git ignore
 
-__pycache__/
+__pycache__
 *.pdf
