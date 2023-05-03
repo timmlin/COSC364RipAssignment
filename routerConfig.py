@@ -16,7 +16,7 @@ def readFile(name):
 
     
 def getInfo(info):
-    
+    print(info)
     routerInfo = info[0].split(", ") 
     processedInputs = []
     processedOutputs = []
@@ -74,7 +74,7 @@ def getInfo(info):
     processedOutputs, outputPortNumbers = ErrorHandler.RouterOutputCheck(outputs)
 
     #comapres the input/output port number to confirm that none appear in both lists
-    #ErrorHandler.CompareInputsOutputs(processedInputs, outputPortNumbers)
+    ErrorHandler.CompareInputsOutputs(processedInputs, outputPortNumbers)
 
     #makes sure the timer values follow the correct formatting
     processedTimers = ErrorHandler.TimerChecks(timers)

@@ -23,7 +23,7 @@ def GenerateResponse(router, recieverID, triggered=False):
 
 
     response = bytearray(4)
-    response[0] = 2 # Indicating response message
+    response[0] = 2 # Indicating response message 
     response[1] = 2 # Version 2
     response[2] = router.id >> 8
     response[3] = router.id & 0xFF #Router ID
