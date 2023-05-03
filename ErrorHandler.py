@@ -109,10 +109,3 @@ def TimerChecks(timers):
         print(f"timer values do not follow the correct format \n \
               please make sure the timers follow the [T, 6*T, 4*T] formatting")
         sys.exit()
-
-
-
-def HeaderChecks():
-    """run error checks on the packet haeder before sending
-    before sending a response"""
-    
