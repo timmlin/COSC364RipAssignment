@@ -48,12 +48,8 @@ def getInfo(info):
 
     # Allows for Timers to be set.
     timers = []
-    if len(routerInfo) == 4:
-        tempTimers = (routerInfo[3].split(" ")[1:])
-        for timer in tempTimers:
-            timers.append(int(timer))
-    else: 
-        timers = [30, 180, 120]  #[T, 6*T, 4*T]
+    
+    timers = [5, 30, 20]  #[T, 6*T, 4*T]
 
 
 #--------------------------------------------------------
